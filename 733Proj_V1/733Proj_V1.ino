@@ -1,15 +1,20 @@
-#define PIN_Left_LineTracker    A2
-#define PIN_Middle_LineTracker  A1
 #define PIN_Right_LineTracker   A0
+#define PIN_Middle_LineTracker  A1
+#define PIN_Left_LineTracker    A2
 
-#define PIN_Left_Motor          6
+#define PIN_MPU6050_SDA         A4
+#define PIN_MPU6050_SCL         A5
+
+#define PIN_LED_Data            4
+
 #define PIN_Right_Motor         5
+#define PIN_Left_Motor          6
 
 #define PIN_Servo1              10
 #define PIN_Servo2              11
 
-#define PIN_MPU6050_SCL         A5
-#define PIN_MPU6050_SDA         A4
+#define PIN_Ultrasonic_Echo     12
+#define PIN_Ultrasonic_Trigger  13
 
 void setup() {
   // put your setup code here, to run once:
