@@ -1,6 +1,6 @@
 /////////////////////////////////Notes///////////////////////////////////////////
 
-// 
+// Pan Servo has a range of 0 - 180 deg
 
 ////////////////////////////////Imports//////////////////////////////////////////
 
@@ -15,10 +15,14 @@
 #define PIN_MPU6050_SDA         A4
 #define PIN_MPU6050_SCL         A5
 
+#define PIN_Mode_Switch         2
+
 #define PIN_LED_Data            4
 
 #define PIN_Right_Motor         5
 #define PIN_Left_Motor          6
+
+#define PIN_IR_Receiver         9
 
 #define PIN_Servo1              10
 #define PIN_Servo2              11
@@ -29,22 +33,25 @@
 ///////////////////////////Servo Definitions/////////////////////////////////////
 
 Servo panServo;
+int panAngle = 0;    // Default servo startup angle. Points straight forward.
 
 /////////////////////////////Code be here////////////////////////////////////////
 
 int main(void)
 {
-  setup();
+  initialize();
   lineFollow();
   maze();
 }
 
-void setup() {
+void initialize() {
   // put your setup code here, to run once:
   Serial.begin(9600);
   
-  // Attach pan servo
+  // Initialize Pan Servo
   panServo.attach(PIN_Servo1);
+  panServo.write(panAngle);
+  Serial.println("Pan servo initialized at " + String(panAngle) + " degrees");
 
   // Line tracker Pin Modes
   pinMode(PIN_Left_LineTracker, INPUT);
