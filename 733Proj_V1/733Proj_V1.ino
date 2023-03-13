@@ -2,9 +2,11 @@
 
 // Pan Servo has a range of 0 - 180 deg
 
-////////////////////////////////Imports//////////////////////////////////////////
-
-#include <Servo.h>
+/* IR Line Trackers
+ *
+ * Black objects give a reading of 1000+
+ * White objects give a reading of ~850 - ~950
+ */
 
 ////////////////////////////Pin Assignments//////////////////////////////////////
 
@@ -17,10 +19,14 @@
 
 #define PIN_Mode_Switch         2
 
+#define PIN_Motor_Standby       3
+
 #define PIN_LED_Data            4
 
 #define PIN_Right_Motor         5
 #define PIN_Left_Motor          6
+#define PIN_Motor_R_IN1         7
+#define PIN_Motor_L_IN1         8
 
 #define PIN_IR_Receiver         9
 
@@ -30,6 +36,11 @@
 #define PIN_Ultrasonic_Echo     12
 #define PIN_Ultrasonic_Trigger  13
 
+////////////////////////////////Imports//////////////////////////////////////////
+
+#include <Servo.h>
+#include "motors.h"
+
 ///////////////////////////Servo Definitions/////////////////////////////////////
 
 Servo panServo;
@@ -37,30 +48,13 @@ int panAngle = 0;    // Default servo startup angle. Points straight forward.
 
 /////////////////////////////Code be here////////////////////////////////////////
 
+#include "initialize.h"
+
 int main(void)
 {
   initialize();
   lineFollow();
   maze();
-}
-
-void initialize() {
-  // put your setup code here, to run once:
-  Serial.begin(9600);
-  
-  // Initialize Pan Servo
-  panServo.attach(PIN_Servo1);
-  panServo.write(panAngle);
-  Serial.println("Pan servo initialized at " + String(panAngle) + " degrees");
-
-  // Line tracker Pin Modes
-  pinMode(PIN_Left_LineTracker, INPUT);
-  pinMode(PIN_Middle_LineTracker, INPUT);
-  pinMode(PIN_Right_LineTracker, INPUT);
-
-  // Motor driver Pin Modes
-  pinMode(PIN_Right_Motor, OUTPUT);
-  pinMode(PIN_Left_Motor, OUTPUT);
 }
 
 void lineFollow(){
