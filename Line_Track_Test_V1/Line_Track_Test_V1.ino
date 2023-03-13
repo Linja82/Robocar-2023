@@ -26,8 +26,10 @@
 #define PIN_Ultrasonic_Echo     12
 #define PIN_Ultrasonic_Trigger  13
 
+#include "motors.h"
 ///////////////////////////////Variables/////////////////////////////////////////
 float right_track, middle_track, left_track;
+int speedL, speedR;
 
 void setup() {
   // put your setup code here, to run once:
@@ -45,5 +47,13 @@ void loop() {
   left_track = analogRead(PIN_Left_LineTracker);
   
   Serial.println("Left: " + String(left_track) + " Middle: " + String(middle_track) + " Right: " + String(right_track));
+  
+  if (right_track > 35.0){
+    drive("DIFFERENTIAL RIGHT", 35, 0);
+  }
+  else if (left_track > 35.0){
+    drive("DIFFERENTIAL LEFT", 0, 35);
+  }
   delay(1000);
 }
+

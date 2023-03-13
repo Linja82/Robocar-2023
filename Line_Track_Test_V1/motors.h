@@ -27,7 +27,7 @@
  *  - Required parameters: NONE
  */
 
-void drive(String direction, int speedL, int speedR, int distance){
+void drive(String direction, int speedL, int speedR){
   if (direction.equals("FORWARD")){
     speedR = speedL;
 

@@ -14,6 +14,8 @@
 #define PIN_Middle_LineTracker  A1
 #define PIN_Left_LineTracker    A2
 
+#define PIN_VBat                A3
+
 #define PIN_MPU6050_SDA         A4
 #define PIN_MPU6050_SCL         A5
 
@@ -39,12 +41,17 @@
 ////////////////////////////////Imports//////////////////////////////////////////
 
 #include <Servo.h>
+#include <FastLED.h>
 #include "motors.h"
 
 ///////////////////////////Servo Definitions/////////////////////////////////////
 
 Servo panServo;
 int panAngle = 0;    // Default servo startup angle. Points straight forward.
+
+///////////////////////////////Variables/////////////////////////////////////////
+
+int motorDifferential = 10;
 
 /////////////////////////////Code be here////////////////////////////////////////
 
