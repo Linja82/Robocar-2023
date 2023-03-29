@@ -5,8 +5,8 @@ Bot code for project
 - Download this: https://github.com/jrowberg/i2cdevlib
 
 # Arduino Pins
-- D0: 
-- D1:
+- D0: RX
+- D1: TX
 - D2: Mode Select Switch
 - D3: Motor Standby
 - D4: LED Data
