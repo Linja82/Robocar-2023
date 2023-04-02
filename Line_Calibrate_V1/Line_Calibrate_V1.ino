@@ -28,19 +28,45 @@
 #define PIN_Ultrasonic_Echo     12
 #define PIN_Ultrasonic_Trigger  13
 
+/////////////////////// Line Follow Variables ///////////////////////////////////
+float avgLeftLine, avgMiddleLine, avgRightLine;
+
 void setup() {
   // put your setup code here, to run once:
   pinMode(PIN_Right_LineTracker, INPUT);
   pinMode(PIN_Middle_LineTracker, INPUT);
   pinMode(PIN_Left_LineTracker, INPUT);
 
-  pinMode(PIN_VBat, INPUT);
-
   Serial.begin(9600);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  Serial.println(analogRead(PIN_VBat)); 
-  delay(500);
+  
+}
+
+void calibrate() {
+  float leftReadings[10];
+  float middleReadings[10];
+  float rightReadings[10];
+  
+  for (int i = 0; i < 10; i++) {
+    leftReadings[i] = analogRead(PIN_Left_LineTracker);
+    middleReadings[i] = analogRead(PIN_Middle_LineTracker);
+    rightReadings[i] = analogRead(PIN_Right_LineTracker);
+    
+    delay(200);
+  }
+  
+  float leftSum, middleSum, rightSum;
+  
+  for (int i = 0; i < 10; i++) {
+    leftSum += leftReadings[i];
+    middleSum += middleReadings[i];
+    rightSum += rightReadings[i];
+  }
+  
+  avgLeftLine = leftSum / 10.0;
+  avgMiddleLine = middleSum / 10.0;
+  avgRightLine = rightSum / 10.0;
 }
