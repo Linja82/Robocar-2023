@@ -30,6 +30,8 @@
 
 /////////////////////// Line Follow Variables ///////////////////////////////////
 float avgLeftLine, avgMiddleLine, avgRightLine;
+float variance = 5.0;
+float leftCurrent, rightCurrent;
 
 void setup() {
   // put your setup code here, to run once:
@@ -38,11 +40,13 @@ void setup() {
   pinMode(PIN_Left_LineTracker, INPUT);
 
   Serial.begin(9600);
+
+  calibrate();
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  
+
 }
 
 void calibrate() {
@@ -50,7 +54,7 @@ void calibrate() {
   float middleReadings[10];
   float rightReadings[10];
   
-  for (int i = 0; i < 10; i++) {
+  for (int i = 0; i < 10; i++) {  // Read 10 values from each line sensor
     leftReadings[i] = analogRead(PIN_Left_LineTracker);
     middleReadings[i] = analogRead(PIN_Middle_LineTracker);
     rightReadings[i] = analogRead(PIN_Right_LineTracker);
@@ -60,13 +64,13 @@ void calibrate() {
   
   float leftSum, middleSum, rightSum;
   
-  for (int i = 0; i < 10; i++) {
+  for (int i = 0; i < 10; i++) {  // sum the line sensor values previously collected
     leftSum += leftReadings[i];
     middleSum += middleReadings[i];
     rightSum += rightReadings[i];
   }
   
-  avgLeftLine = leftSum / 10.0;
-  avgMiddleLine = middleSum / 10.0;
-  avgRightLine = rightSum / 10.0;
+  avgLeftLine = leftSum / 10.0;       // Should be the floor colour 
+  avgMiddleLine = middleSum / 10.0;   // Should be black tape
+  avgRightLine = rightSum / 10.0;     // Should be the floor colour 
 }

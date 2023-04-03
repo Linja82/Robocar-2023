@@ -28,49 +28,37 @@
 
 ///////////////////////////////Variables/////////////////////////////////////////
 float avgLeftLine, avgMiddleLine, avgRightLine;
-float variance = 10.0;
+float variance = 5.0;
 float leftCurrent, middleCurrent, rightCurrent;
 
 #include "motors.h"
-#include "line_calibrate.h"
 
 void setup() {
   // put your setup code here, to run once:
-  Serial.begin(9600);
+  Serial.begin(115200);
   
   pinMode(PIN_Right_LineTracker, INPUT);
   pinMode(PIN_Middle_LineTracker, INPUT);
   pinMode(PIN_Left_LineTracker, INPUT);
-
-  calibrate();
 }
 
 void loop() {
-  drive("STOP", 0, 0);
-  delayMicroseconds(15);
-  leftCurrent = analogRead(PIN_Left_LineTracker);
-  rightCurrent = analogRead(PIN_Right_LineTracker);
-  middleCurrent = analogRead(PIN_Middle_LineTracker);
+  leftCurrent = digitalRead(PIN_Left_LineTracker);
+  rightCurrent = digitalRead(PIN_Right_LineTracker);
+  middleCurrent = digitalRead(PIN_Middle_LineTracker);
 
-  digitalWrite(PIN_Motor_Standby, HIGH);
+  Serial.println("Left: " + String(leftCurrent) + " Middle: " + String(middleCurrent) + " Right: " + String(rightCurrent));
 
-  //Serial.println("Left: " + String(leftCurrent) + " Middle: " + String(middleCurrent) + " Right: " + String(rightCurrent));
-  Serial.print(leftCurrent);
-  Serial.print(" ");
-  Serial.print(middleCurrent);
-  Serial.print(" ");
-  Serial.println(rightCurrent);
-
-  if (leftCurrent > (avgLeftLine + variance) || leftCurrent < (avgLeftLine - variance)) { // Left tracker detected black tape
-    // Serial.println("Left line tracker detected tape. Turning left.");
+  if (leftCurrent > 0) {
+    Serial.println("Left line tracker detected tape. Turning left.");
     drive("DIFFERENTIAL LEFT", 35, 0);
   }
-  else if (rightCurrent > (avgRightLine + variance) || rightCurrent < (avgRightLine - variance)) {
-    // Serial.println("Right line tracker detected tape. Turning right.");
+  else if (rightCurrent > 0) {
+    Serial.println("Right line tracker detected tape. Turning right.");
     drive("DIFFERENTIAL RIGHT", 0, 35);
   }
   else {
-    // Serial.println("No tape detected by left or right tracker. Driving straight.");
+    Serial.println("No tape detected by left or right tracker. Driving straight.");
     drive("FORWARD", 35, 35);
   }
 }
