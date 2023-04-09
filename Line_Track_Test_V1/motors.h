@@ -65,7 +65,7 @@ void drive(String direction, int speedL, int speedR){
   }
 
   else if (direction.equals("DIFFERENTIAL LEFT")){
-    speedR = speedL + 30;
+    speedR = speedL + 50;
     speedL -= 15;
 
     digitalWrite(PIN_Motor_Standby, HIGH);
@@ -78,13 +78,13 @@ void drive(String direction, int speedL, int speedR){
   }
 
   else if (direction.equals("DIFFERENTIAL RIGHT")){
-    speedL = speedR + 30;
+    speedL = speedR + 50;
     speedR -= 15;
 
     digitalWrite(PIN_Motor_Standby, HIGH);
 
     digitalWrite(PIN_Motor_L_IN1, HIGH);
-    digitalWrite(PIN_Motor_R_IN1, HIGH);
+    digitalWrite(PIN_Motor_R_IN1, LOW);
 
     analogWrite(PIN_Left_Motor, speedL);
     analogWrite(PIN_Right_Motor, speedR);

@@ -30,6 +30,7 @@
 float avgLeftLine, avgMiddleLine, avgRightLine;
 float variance = 10.0;
 float leftCurrent, middleCurrent, rightCurrent;
+int dark = 50;
 
 #include "motors.h"
 #include "line_calibrate.h"
@@ -42,12 +43,12 @@ void setup() {
   pinMode(PIN_Middle_LineTracker, INPUT);
   pinMode(PIN_Left_LineTracker, INPUT);
 
-  calibrate();
+  // calibrate();
 }
 
 void loop() {
   drive("STOP", 0, 0);
-  delayMicroseconds(15);
+  delayMicroseconds(10);
   leftCurrent = analogRead(PIN_Left_LineTracker);
   rightCurrent = analogRead(PIN_Right_LineTracker);
   middleCurrent = analogRead(PIN_Middle_LineTracker);
@@ -61,17 +62,30 @@ void loop() {
   Serial.print(" ");
   Serial.println(rightCurrent);
 
-  if (leftCurrent > (avgLeftLine + variance) || leftCurrent < (avgLeftLine - variance)) { // Left tracker detected black tape
+  // if (leftCurrent > (avgLeftLine + variance) || leftCurrent < (avgLeftLine - variance)) { // Left tracker detected black tape
+  //   // Serial.println("Left line tracker detected tape. Turning left.");
+  //   drive("DIFFERENTIAL LEFT", 35, 0);
+  // }
+  // else if (rightCurrent > (avgRightLine + variance) || rightCurrent < (avgRightLine - variance)) {
+  //   // Serial.println("Right line tracker detected tape. Turning right.");
+  //   drive("DIFFERENTIAL RIGHT", 0, 35);
+  // }
+  // else {
+  //   // Serial.println("No tape detected by left or right tracker. Driving straight.");
+  //   drive("FORWARD", 35, 35);
+  // }
+
+  if (leftCurrent > dark) { // Left tracker detected black tape
     // Serial.println("Left line tracker detected tape. Turning left.");
     drive("DIFFERENTIAL LEFT", 35, 0);
   }
-  else if (rightCurrent > (avgRightLine + variance) || rightCurrent < (avgRightLine - variance)) {
+  else if (rightCurrent > dark) {
     // Serial.println("Right line tracker detected tape. Turning right.");
     drive("DIFFERENTIAL RIGHT", 0, 35);
   }
   else {
     // Serial.println("No tape detected by left or right tracker. Driving straight.");
-    drive("FORWARD", 35, 35);
+    drive("FORWARD", 50, 50);
   }
 }
 

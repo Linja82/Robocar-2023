@@ -36,6 +36,9 @@ int distance;
 
 #include "motors.h"
 #include <Servo.h>
+#include <HCSR04.h>
+
+HCSR04 hc(13, 12);;
 
 Servo pan;
 
@@ -45,19 +48,11 @@ void setup() {
 
   pan.attach(PIN_Servo1);
   pan.write(panAngle);
-
-  pinMode(PIN_Ultrasonic_Trigger, OUTPUT);
-  pinMode(PIN_Ultrasonic_Echo, INPUT);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  digitalWrite(PIN_Ultrasonic_Trigger, LOW);
-  delayMicroseconds(2);
-
-  digitalWrite(PIN_Ultrasonic_Trigger, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(PIN_Ultrasonic_Trigger, LOW);
-
-  duration = pulse
+  Serial.println(hc.dist());
+  delay(60);
+  pan.write(panAngle);
 }
