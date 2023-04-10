@@ -47,7 +47,7 @@
 ////////////////////////// Servo Definitions ////////////////////////////////////
 
 Servo panServo;
-int panAngle = 0;    // Default servo startup angle. Points straight forward.
+int panAngle = 90;    // Default servo startup angle. Points straight forward.
 
 ////////////////////////////// Variables ////////////////////////////////////////
 
