@@ -7,7 +7,7 @@ void stop();
 
 ///////////////////////////// Drive Things //////////////////////////////////////
 #define speed 60
-#define turnSpeed 40
+#define turnSpeed 45
 #define speedShift 20
 #define variance 3   // Number of degrees up or down that is allowed away from the target
 
@@ -114,13 +114,7 @@ void maze(){
   Serial.println("Stage 4: Turning left to face Wall 2");
   
   // Stage 4, Turn left to face Wall 2
-  yaw = getGyro("Yaw");
-  yawTarget = yaw - 90;
-  
-  while(yaw > yawTarget){
-    turn_Left();
-    yaw = getGyro("Yaw");
-  }
+  turn_Left();
   
   stop();
   Serial.println("Stage 5: Approaching Wall 2");
@@ -137,13 +131,7 @@ void maze(){
   Serial.println("Stage 6: Turning left to face Wall 3");
   
   // Stage 6, Turn Left to face Wall 3
-  yaw = getGyro("Yaw");
-  yawTarget = yaw - 90;
-  
-  while(yaw > yawTarget){
-    turn_Left();
-    yaw = getGyro("Yaw");
-  }
+  turn_Left();
   
   stop();
   Serial.println("Stage 7: Approaching Wall 3");
@@ -160,13 +148,7 @@ void maze(){
   Serial.println("Stage 8: Turn right to face Wall 4");
   
   // Stage 8, Turn right to face Wall 4
-  yaw = getGyro("Yaw");
-  yawTarget = yaw + 90;
-  
-  while(yaw < yawTarget){
-    turn_Right();
-    yaw = getGyro("Yaw");
-  }
+  turn_Right();
   
   stop();
   Serial.println("Stage 9: Approach Wall 4");
@@ -183,13 +165,7 @@ void maze(){
   Serial.println("Stage 10: Turn right to face Wall 5");
   
   // Stage 10, Turn right to face Wall 5
-  yaw = getGyro("Yaw");
-  yawTarget = yaw + 90;
-  
-  while(yaw < yawTarget){
-    turn_Right();
-    yaw = getGyro("Yaw");
-  }
+  turn_Right();
   
   stop();
   Serial.println("Stage 11: Approach Wall 5");
@@ -206,13 +182,7 @@ void maze(){
   Serial.println("Stage 12: Turn left to face Wall 6");
   
   // Stage 12, Turn left to face Wall 6
-  yaw = getGyro("Yaw");
-  yawTarget = yaw - 90;
-  
-  while(yaw > yawTarget){
-    turn_Left();
-    yaw = getGyro("Yaw");
-  }
+  turn_Left();
   
   stop();
   Serial.println("Stage 13: Approach Wall 6");
@@ -229,13 +199,7 @@ void maze(){
   Serial.println("Stage 14: Turn left to face exit");
   
   // Stage 14, Turn left to face exit
-  yaw = getGyro("Yaw");
-  yawTarget = yaw - 90;
-  
-  while(yaw > yawTarget){
-    turn_Left();
-    yaw = getGyro("Yaw");
-  }
+  turn_Left();
   
   stop();
   Serial.println("Stage 15: Approach exit");
@@ -320,27 +284,27 @@ void drive_straight(){
 }
 
 void turn_Left(){
-  if (yaw > yawTarget){
-    digitalWrite(PIN_Motor_Standby, HIGH);    // Enables the motor driver
-    
-    digitalWrite(PIN_Motor_L_IN1, LOW);       // Set Left side reverse
-    digitalWrite(PIN_Motor_R_IN1, HIGH);      // Set Right side forward
-    
-    analogWrite(PIN_Left_Motor, turnSpeed);       // Runs the left motors at [speed] which is a PWM value from 0-255
-    analogWrite(PIN_Right_Motor, turnSpeed);      // Runs the right motors at [speed] which is a PWM value from 0-255
-  }
+  digitalWrite(PIN_Motor_Standby, HIGH);    // Enables the motor driver
+  
+  digitalWrite(PIN_Motor_L_IN1, LOW);       // Set Left side reverse
+  digitalWrite(PIN_Motor_R_IN1, HIGH);      // Set Right side forward
+  
+  analogWrite(PIN_Left_Motor, turnSpeed);       // Runs the left motors at [speed] which is a PWM value from 0-255
+  analogWrite(PIN_Right_Motor, turnSpeed);      // Runs the right motors at [speed] which is a PWM value from 0-255
+
+  delay(1800);
 }
 
 void turn_Right(){
-  if (yaw < yawTarget){
-    digitalWrite(PIN_Motor_Standby, HIGH);    // Enables the motor driver
-  
-    digitalWrite(PIN_Motor_L_IN1, HIGH);      // Set Left side forward
-    digitalWrite(PIN_Motor_R_IN1, LOW);       // Set Right side reverse
-  
-    analogWrite(PIN_Left_Motor, turnSpeed);       // Runs the left motors at [speed] which is a PWM value from 0-255
-    analogWrite(PIN_Right_Motor, turnSpeed);      // Runs the right motors at [speed] which is a PWM value from 0-255
-  }
+  digitalWrite(PIN_Motor_Standby, HIGH);    // Enables the motor driver
+
+  digitalWrite(PIN_Motor_L_IN1, HIGH);      // Set Left side forward
+  digitalWrite(PIN_Motor_R_IN1, LOW);       // Set Right side reverse
+
+  analogWrite(PIN_Left_Motor, turnSpeed);       // Runs the left motors at [speed] which is a PWM value from 0-255
+  analogWrite(PIN_Right_Motor, turnSpeed);      // Runs the right motors at [speed] which is a PWM value from 0-255
+
+  delay(1800);
 }
 
 void stop(){

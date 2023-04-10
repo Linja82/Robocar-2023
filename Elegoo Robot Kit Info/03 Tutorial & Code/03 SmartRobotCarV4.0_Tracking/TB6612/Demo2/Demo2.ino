@@ -21,4 +21,6 @@ void loop()
   delay(10);
   Application_FunctionSet.ApplicationFunctionSet_Tracking(); 
   Application_FunctionSet.ApplicationFunctionSet_SensorDataUpdate();
+
+  
 }

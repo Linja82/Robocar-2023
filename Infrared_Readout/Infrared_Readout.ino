@@ -40,9 +40,9 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  leftCurrent = digitalRead(PIN_Left_LineTracker);
-  rightCurrent = digitalRead(PIN_Right_LineTracker);
-  middleCurrent = digitalRead(PIN_Middle_LineTracker);
+  leftCurrent = analogRead(PIN_Left_LineTracker);
+  rightCurrent = analogRead(PIN_Right_LineTracker);
+  middleCurrent = analogRead(PIN_Middle_LineTracker);
   
   Serial.println("Left: " + String(leftCurrent) + " Middle: " + String(middleCurrent) + " Right: " + String(rightCurrent));
 }
