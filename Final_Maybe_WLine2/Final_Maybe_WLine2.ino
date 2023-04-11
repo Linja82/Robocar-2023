@@ -48,12 +48,11 @@
 #include <avr/wdt.h>
 #include "DeviceDriverSet_xxx0.h"
 #include "ApplicationFunctionSet_xxx0.h"
-// #include "lineCount.h"
 
 Servo panServo;
 int panAngle = 90;
 
-int blackLines = 0;
+int blackLines = 0;   // Number of black cross lines the car has driver over
 
 ////////////////////////////// Main Code ////////////////////////////////////////
 void setup() {
@@ -70,37 +69,37 @@ void setup() {
   // pinMode(PIN_Middle_LineTracker, INPUT);
   // pinMode(PIN_Right_LineTracker, INPUT);
   
-  Application_FunctionSet.ApplicationFunctionSet_Init();
+  Application_FunctionSet.ApplicationFunctionSet_Init();  // Initialize the Elegoo line follow code
 }
 
 void loop() {
-  // lineTrack();
+  lineTrack();    // Function for the line track logic
  
-  // delay(3000);
-  maze();
+  delay(3000);    // Wait 3 seconds before entering the maze
+  maze();         // Function for the maze logic
   
-  exit(0);
+  exit(0);        // Exit and stop all commands
 }
 
-int S = 100;
-int E = 400;
+int S = 100;      // Low range for infrared detection
+int E = 400;      // Upper range for infrared detection
 
-void lineTrack(){
-  while (blackLines < 2) {
+void lineTrack(){   // Line track function
+  while (blackLines < 2) {    // While less than 2 black lines have been passed
     delay(10);
     Application_FunctionSet.ApplicationFunctionSet_Tracking(); 
     Application_FunctionSet.ApplicationFunctionSet_SensorDataUpdate();
     
-    if (line_comparator(analogRead(PIN_Middle_LineTracker), S, E) && line_comparator(analogRead(PIN_Left_LineTracker), S, E) && line_comparator(analogRead(PIN_Right_LineTracker), S, E)) {
-      blackLines += 1;
-      delay(30);
+    if (line_comparator(analogRead(PIN_Middle_LineTracker), S, E) && line_comparator(analogRead(PIN_Left_LineTracker), S, E) && line_comparator(analogRead(PIN_Right_LineTracker), S, E)) {   // If all 3 line sensors detect the tape
+      blackLines += 1;  // Increment the black line count by 1
+      delay(30);        // Wait 30 milliseconds, so the same line isn't detected more than once
     }
   } 
   
   digitalWrite(PIN_Motor_Standby, LOW);    // Disables the motor driver
 }
 
-bool line_comparator(long x, long s, long e) //f(x)
+bool line_comparator(long x, long s, long e)  // Checks if the infrared line sensor is within the preset range
 {
   if (s <= x && x <= e)
     return true;

@@ -1,3 +1,4 @@
+/////////////////////// Function Initializations ////////////////////////////////
 float getGyro(String angle);
 void drive_straight();
 void turn_Left();
@@ -6,10 +7,10 @@ void measure_distance();
 void stop();
 
 ///////////////////////////// Drive Things //////////////////////////////////////
-#define speed 60
-#define turnSpeed 45
-#define speedShift 20
-#define variance 3   // Number of degrees up or down that is allowed away from the target
+#define speed 60        // Forward driving speed
+#define turnSpeed 45    // Speed for variable turning, left and right motor have inverted speeds
+#define speedShift 20   // Speed difference between left/right when driving straight with a slight differential
+#define variance 3      // Number of degrees up or down that is allowed away from the target
 
 ////////////////////////// Ultrasonic Things ////////////////////////////////////
 #define MAX_DISTANCE 300  // Maximum distance the ultrasonic will try to measure in cm
@@ -21,7 +22,7 @@ int distance;
 #define approachDist  9
 
 /////////////////////////// MPU6050 Things //////////////////////////////////////
-MPU6050 mpu;
+MPU6050 mpu;    // MPU object
 
 // MPU control/status vars
 bool dmpReady = false;  // set true if DMP init was successful
@@ -32,7 +33,7 @@ uint16_t fifoCount;     // count of all bytes currently in FIFO
 uint8_t fifoBuffer[64]; // FIFO storage buffer
 
 // orientation/motion vars
-Quaternion q1;           // [w, x, y, z]         quaternion container
+Quaternion q1;          // [w, x, y, z]         quaternion container
 VectorInt16 aa;         // [x, y, z]            accel sensor measurements
 VectorInt16 aaReal;     // [x, y, z]            gravity-free accel sensor measurements
 VectorInt16 aaWorld;    // [x, y, z]            world-frame accel sensor measurements
@@ -43,15 +44,16 @@ float ypr[3];           // [yaw, pitch, roll]   yaw/pitch/roll container and gra
 // Angle variables
 float yaw, roll, pitch;
 float yawTarget, pitchTarget;
-#define rampAngle 3
+#define rampAngle 3     // Angle at which the ramp is detected
 
-void mpuForMaze() {
+void mpuForMaze() {   // Function to initialize all the devices needed for the maze
   // Drive initialization
   pinMode(PIN_Right_Motor, OUTPUT);
   pinMode(PIN_Left_Motor, OUTPUT);
   pinMode(PIN_Motor_R_IN1, OUTPUT);
   pinMode(PIN_Motor_L_IN1, OUTPUT);
   pinMode(PIN_Motor_Standby, OUTPUT);
+  
   // MPU6050 Initialization
   #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
     Wire.begin();
@@ -63,7 +65,7 @@ void mpuForMaze() {
   mpu.initialize();
 
   devStatus = mpu.dmpInitialize();
-      // supply your own gyro offsets here, scaled for min sensitivity
+  // supply your own gyro offsets here, scaled for min sensitivity
   mpu.setXGyroOffset(51);     // mpu.setXGyroOffset(220);
   mpu.setYGyroOffset(-17);    // mpu.setYGyroOffset(76);
   mpu.setZGyroOffset(47);     // mpu.setZGyroOffset(-85);
@@ -76,13 +78,13 @@ void mpuForMaze() {
 }
 
 void maze(){
-  mpuForMaze();
+  mpuForMaze();   // Initialize devices required for maze
   // Stage 1, approach ramp
   Serial.println("Stage 1: Approach Ramp");
   
-  pitch = getGyro("Pitch");
-  pitchTarget = pitch + rampAngle;
-  yawTarget = getGyro("Yaw");   // Get the current heading
+  pitch = getGyro("Pitch");         // Get the current pitch of the car
+  pitchTarget = pitch + rampAngle;  // Set the target pitch to the current pitch + the ramp threshold angle
+  yawTarget = getGyro("Yaw");       // Set the heading target to the current heading
   
   while (pitch < pitchTarget){
     drive_straight();
