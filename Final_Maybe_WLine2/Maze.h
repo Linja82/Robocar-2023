@@ -18,8 +18,8 @@ void stop();
 
 NewPing sonar(PIN_Ultrasonic_Trigger, PIN_Ultrasonic_Echo, MAX_DISTANCE);
 
-int distance;
-#define approachDist  9
+int distance;             // Variable containing the current distance from the wall
+#define approachDist  9   // Distance from the maze wall that the car will stop at
 
 /////////////////////////// MPU6050 Things //////////////////////////////////////
 MPU6050 mpu;    // MPU object
@@ -87,15 +87,15 @@ void maze(){
   yawTarget = getGyro("Yaw");       // Set the heading target to the current heading
   
   while (pitch < pitchTarget){
-    drive_straight();
-    pitch = getGyro("Pitch");
+    drive_straight();           // Call the drive straight function
+    pitch = getGyro("Pitch");   // Get the current pitch of the car
   }
    
   Serial.println("Stage 2: Ramp detected, climbing ramp");
   
   // Stage 2, climb ramp
   pitch = getGyro("Pitch");
-  pitchTarget = pitch - rampAngle;
+  pitchTarget = pitch - rampAngle;  // Set the target pitch to the current pitch - the ramp threshold angle
   
   while (pitch > pitchTarget){
     drive_straight();
@@ -226,7 +226,7 @@ void measure_distance() {  // Uses the ultrasonic sensor to measure the distance
   delay(50);
 }
 
-float getGyro(String angle){
+float getGyro(String angle){    // Get angle readings from the MPU6050
   mpu.dmpGetCurrentFIFOPacket(fifoBuffer);  // Get the Latest packet 
   
   // display Euler angles in degrees
@@ -248,12 +248,12 @@ float getGyro(String angle){
   }
 }
 
-void drive_straight(){
+void drive_straight(){    // Function that will attempt to maintain the heading that was given at the start
   yaw = getGyro("Yaw");
-  float yaw_max = yawTarget + variance;
+  float yaw_max = yawTarget + variance;   // Calculate the max angle that we can be at, based on the desired heading + the acceptable angle offset
   float yaw_min = yawTarget - variance;
   
-  if (yaw > yaw_max){   // turn slight left
+  if (yaw > yaw_max){   // If the car is drifting to the right of the desired heading, turn slight left. Slight left means turning using differential speeds for L and R, instead of inverted speeds
     // Serial.println("Turning slight left");
     digitalWrite(PIN_Motor_Standby, HIGH);    // Enables the motor driver
     
@@ -263,7 +263,7 @@ void drive_straight(){
     analogWrite(PIN_Left_Motor, (speed - speedShift));       // Runs the left motors at [speed] which is a PWM value from 0-255
     analogWrite(PIN_Right_Motor, speed);      // Runs the right motors at [speed] which is a PWM value from 0-255
   }
-  else if (yaw < yaw_min){    // turn slight right
+  else if (yaw < yaw_min){    // If the car is drifting to the left of the desired heading, turn slight right. Slight right means turning using differential speeds for L and R, instead of inverted speeds
     // Serial.println("Turning slight right");
     digitalWrite(PIN_Motor_Standby, HIGH);    // Enables the motor driver
     
@@ -273,7 +273,7 @@ void drive_straight(){
     analogWrite(PIN_Left_Motor, speed);       // Runs the left motors at [speed] which is a PWM value from 0-255
     analogWrite(PIN_Right_Motor, (speed - speedShift));      // Runs the right motors at [speed] which is a PWM value from 0-255
   }
-  else{   // drive straight
+  else{   // If the current heading is within the acceptable offset range, drive straight. Driving straight means applying equal power to L and R motors
     // Serial.println("Driving straight");
     digitalWrite(PIN_Motor_Standby, HIGH);    // Enables the motor driver
     
@@ -285,30 +285,30 @@ void drive_straight(){
   }
 }
 
-void turn_Left(){
-  digitalWrite(PIN_Motor_Standby, HIGH);    // Enables the motor driver
+void turn_Left(){     // Turn using inverted motor speeds for L and R
+  digitalWrite(PIN_Motor_Standby, HIGH);      // Enables the motor driver
   
-  digitalWrite(PIN_Motor_L_IN1, LOW);       // Set Left side reverse
-  digitalWrite(PIN_Motor_R_IN1, HIGH);      // Set Right side forward
+  digitalWrite(PIN_Motor_L_IN1, LOW);         // Set Left side reverse
+  digitalWrite(PIN_Motor_R_IN1, HIGH);        // Set Right side forward
   
-  analogWrite(PIN_Left_Motor, turnSpeed);       // Runs the left motors at [speed] which is a PWM value from 0-255
-  analogWrite(PIN_Right_Motor, turnSpeed);      // Runs the right motors at [speed] which is a PWM value from 0-255
+  analogWrite(PIN_Left_Motor, turnSpeed);     // Runs the left motors at [speed] which is a PWM value from 0-255
+  analogWrite(PIN_Right_Motor, turnSpeed);    // Runs the right motors at [speed] which is a PWM value from 0-255
 
   delay(1800);
 }
 
-void turn_Right(){
-  digitalWrite(PIN_Motor_Standby, HIGH);    // Enables the motor driver
+void turn_Right(){    // Turn using inverted motor speeds for L and R
+  digitalWrite(PIN_Motor_Standby, HIGH);      // Enables the motor driver
 
-  digitalWrite(PIN_Motor_L_IN1, HIGH);      // Set Left side forward
-  digitalWrite(PIN_Motor_R_IN1, LOW);       // Set Right side reverse
+  digitalWrite(PIN_Motor_L_IN1, HIGH);        // Set Left side forward
+  digitalWrite(PIN_Motor_R_IN1, LOW);         // Set Right side reverse
 
-  analogWrite(PIN_Left_Motor, turnSpeed);       // Runs the left motors at [speed] which is a PWM value from 0-255
-  analogWrite(PIN_Right_Motor, turnSpeed);      // Runs the right motors at [speed] which is a PWM value from 0-255
+  analogWrite(PIN_Left_Motor, turnSpeed);     // Runs the left motors at [speed] which is a PWM value from 0-255
+  analogWrite(PIN_Right_Motor, turnSpeed);    // Runs the right motors at [speed] which is a PWM value from 0-255
 
   delay(1800);
 }
 
-void stop(){
-  digitalWrite(PIN_Motor_Standby, LOW);    // Disables the motor driver
+void stop(){          // Kill the motors
+  digitalWrite(PIN_Motor_Standby, LOW);       // Disables the motor driver, causing all motors to stop
 }

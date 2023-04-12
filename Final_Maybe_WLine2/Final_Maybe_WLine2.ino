@@ -49,8 +49,8 @@
 #include "DeviceDriverSet_xxx0.h"
 #include "ApplicationFunctionSet_xxx0.h"
 
-Servo panServo;
-int panAngle = 90;
+Servo panServo;       // Servo object
+int panAngle = 90;    // Angle of the servo
 
 int blackLines = 0;   // Number of black cross lines the car has driver over
 
