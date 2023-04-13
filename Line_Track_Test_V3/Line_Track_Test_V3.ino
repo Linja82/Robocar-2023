@@ -28,38 +28,25 @@
 
 ///////////////////////////////Variables/////////////////////////////////////////
 float avgLeftLine, avgMiddleLine, avgRightLine;
-float variance = 5.0;
+float variance = 10.0;
 float leftCurrent, middleCurrent, rightCurrent;
+int dark = 50;
 
 #include "motors.h"
+#include "line_calibrate.h"
 
 void setup() {
   // put your setup code here, to run once:
-  Serial.begin(115200);
+  Serial.begin(9600);
   
-  pinMode(PIN_Right_LineTracker, INPUT);    
+  pinMode(PIN_Right_LineTracker, INPUT);
   pinMode(PIN_Middle_LineTracker, INPUT);
   pinMode(PIN_Left_LineTracker, INPUT);
+
+  calibrate();    // Run the calibration function
 }
 
 void loop() {
-  leftCurrent = digitalRead(PIN_Left_LineTracker);      // Read the current value of the left line tracker
-  rightCurrent = digitalRead(PIN_Right_LineTracker);    // Read the current value of the right line tracker
-  middleCurrent = digitalRead(PIN_Middle_LineTracker);  // Read the current value of the middle line tracker
 
-  // Serial.println("Left: " + String(leftCurrent) + " Middle: " + String(middleCurrent) + " Right: " + String(rightCurrent));
-
-  if (leftCurrent > 0) {
-    Serial.println("Left line tracker detected tape. Turning left.");
-    drive("DIFFERENTIAL LEFT", 35, 0);
-  }
-  else if (rightCurrent > 0) {
-    Serial.println("Right line tracker detected tape. Turning right.");
-    drive("DIFFERENTIAL RIGHT", 0, 35);
-  }
-  else {
-    Serial.println("No tape detected by left or right tracker. Driving straight.");
-    drive("FORWARD", 35, 35);
-  }
 }
 
